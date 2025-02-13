@@ -7,7 +7,7 @@ export default defineConfig({
   theme: {
     extend: {
       colors: {
-        primary:   // Replace with your actual color code
+        primary: ""  // Replace with your actual color code
       },
     },
   },

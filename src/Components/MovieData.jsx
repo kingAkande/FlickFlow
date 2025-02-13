@@ -29,7 +29,7 @@ const MovieData = ({ setIsOpen1, isOpen1, movies }) => {
     //     )}
     //   </div>
 
-    <div className="w-[42rem] max-w-[42rem] bg-[#2b3035] rounded-lg overflow-scroll relative p-4">
+    <div className="w-[42rem] max-w-[42rem] bg-[#2b3035] rounded-lg  relative p-4 text-white">
       <button
         className="absolute top-4 right-4 text-2xl font-bold bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center"
         onClick={() => setIsOpen1((open) => !open)}

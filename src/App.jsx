@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable react/no-unknown-property */
 import { useState } from "react";
 import Navbar from "./Components/Navbar";
 import MovieData from "./Components/MovieData";
+import WatchedData from "./Components/WatchedData";
 
 function App() {
   const tempMovieData = [
@@ -67,68 +67,25 @@ function App() {
   <div>MovieData</div>;
   return (
     <>
-      <Navbar setQuery={setQuery} query={query} movies={movies} />
+      <div className="bg-[#212529]">
+        <Navbar setQuery={setQuery} query={query} movies={movies} />
 
-      <main className="main">
-        <MovieData movies={movies} isOpen1={isOpen1} setIsOpen1={setIsOpen1} />
-
-        <div className="box">
-          <button
-            className="btn-toggle"
-            onClick={() => setIsOpen2((open) => !open)}
-          >
-            {isOpen2 ? "–" : "+"}
-          </button>
-          {isOpen2 && (
-            <>
-              <div className="summary">
-                <h2>Movies you watched</h2>
-                <div>
-                  <p>
-                    <span>#️⃣</span>
-                    <span>{watched.length} movies</span>
-                  </p>
-                  <p>
-                    <span>⭐️</span>
-                    <span>{avgImdbRating}</span>
-                  </p>
-                  <p>
-                    <span>🌟</span>
-                    <span>{avgUserRating}</span>
-                  </p>
-                  <p>
-                    <span>⏳</span>
-                    <span>{avgRuntime} min</span>
-                  </p>
-                </div>
-              </div>
-
-              <ul className="list">
-                {watched.map((movie) => (
-                  <li key={movie.imdbID}>
-                    <img src={movie.Poster} alt={`${movie.Title} poster`} />
-                    <h3>{movie.Title}</h3>
-                    <div>
-                      <p>
-                        <span>⭐️</span>
-                        <span>{movie.imdbRating}</span>
-                      </p>
-                      <p>
-                        <span>🌟</span>
-                        <span>{movie.userRating}</span>
-                      </p>
-                      <p>
-                        <span>⏳</span>
-                        <span>{movie.runtime} min</span>
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-        </div>
-      </main>
+        <main className="flex justify-center gap-6 mt-6">
+          <MovieData
+            movies={movies}
+            isOpen1={isOpen1}
+            setIsOpen1={setIsOpen1}
+          />
+          <WatchedData
+            avgRuntime={avgRuntime}
+            avgUserRating={avgUserRating}
+            avgImdbRating={avgImdbRating}
+            watched={watched}
+            isOpen2={isOpen2}
+            setIsOpen2={setIsOpen2}
+          />
+        </main>
+      </div>
     </>
   );
 }
