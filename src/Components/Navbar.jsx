@@ -26,9 +26,9 @@ const Navbar = ({ setQuery, query, movies }) => {
     //   </p>
     // </nav>
 
-    <nav className="grid grid-cols-3 items-center h-28 px-8 bg-[#6741d9] rounded-lg">
+    <nav className="grid grid-cols-3 items-center h-28 px-6 bg-[#6741d9] rounded-lg">
       <div className="flex items-center gap-2">
-        <span role="img">🍿</span>
+        <span className="text-3xl">🍿</span>
         <h1 className="text-white font-bold text-xl">usePopcorn</h1>
       </div>
       <input

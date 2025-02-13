@@ -2,6 +2,7 @@
 /* eslint-disable react/no-unknown-property */
 import { useState } from "react";
 import Navbar from "./Components/Navbar";
+import MovieData from "./Components/MovieData";
 
 function App() {
   const tempMovieData = [
@@ -63,36 +64,13 @@ function App() {
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie.userRating));
   const avgRuntime = average(watched.map((movie) => movie.runtime));
-
+  <div>MovieData</div>;
   return (
     <>
       <Navbar setQuery={setQuery} query={query} movies={movies} />
 
       <main className="main">
-        <div className="box">
-          <button
-            className="btn-toggle"
-            onClick={() => setIsOpen1((open) => !open)}
-          >
-            {isOpen1 ? "–" : "+"}
-          </button>
-          {isOpen1 && (
-            <ul className="list">
-              {movies?.map((movie) => (
-                <li key={movie.imdbID}>
-                  <img src={movie.Poster} alt={`${movie.Title} poster`} />
-                  <h3>{movie.Title}</h3>
-                  <div>
-                    <p>
-                      <span>🗓</span>
-                      <span>{movie.Year}</span>
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <MovieData movies={movies} isOpen1={isOpen1} setIsOpen1={setIsOpen1} />
 
         <div className="box">
           <button
