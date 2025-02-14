@@ -67,9 +67,9 @@ const WatchedData = ({
     //         </>
     //       )}
     //     </div>
-    <div className="w-[42rem] max-w-[42rem] bg-[#2b3035] rounded-lg overflow-scroll relative p-4 text-white">
+    <div className="w-[42rem] max-w-[42rem] bg-[#2b3035] rounded-lg  relative p-4 text-white">
       <button
-        className="absolute top-2 right-2 h-6 w-6 rounded-full border-none bg-background-900 text-text font-bold text-lg flex items-center justify-center cursor-pointer z-50"
+        className="absolute top-2 right-2 h-6 w-6 rounded-full border-none bg-[#212529] text-text font-bold text-lg flex items-center justify-center cursor-pointer z-50"
         onClick={() => setIsOpen2((open) => !open)}
       >
         {isOpen2 ? "–" : "+"}
@@ -79,7 +79,7 @@ const WatchedData = ({
         <>
           <div className="mb-4 p-4 bg-background-700 rounded-md">
             <h2 className="text-xl font-semibold mb-2">Movies you watched</h2>
-            <div className="space-y-2 flex gap-8">
+            <div className="space-y-2 flex gap-8">  
               <p className="flex items-center gap-2 text-sm">
                 <span>#️⃣</span>
                 <span>{watched.length} movies</span>
