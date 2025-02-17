@@ -7,10 +7,7 @@ import WashedMovie from "./WashedMovie";
 const WatchedData = ({
   isOpen2,
   setIsOpen2,
-  watched,
-  avgImdbRating,
-  avgUserRating,
-  avgRuntime,
+  children,
 }) => {
   return (
     <div className="w-[42rem] max-w-[42rem] bg-[#2b3035] rounded-lg  relative p-4 text-white">
@@ -21,18 +18,7 @@ const WatchedData = ({
         {isOpen2 ? "–" : "+"}
       </button>
 
-      {isOpen2 && (
-        <>
-          <WashedSummary
-            watched={watched}
-            avgImdbRating={avgImdbRating}
-            avgUserRating={avgUserRating}
-            avgRuntime={avgRuntime}
-          />
-
-          <WashedMovie watched={watched} />
-        </>
-      )}
+      {isOpen2 && children}
     </div>
   );
 };

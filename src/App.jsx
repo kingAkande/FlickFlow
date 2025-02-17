@@ -3,6 +3,9 @@ import { useState } from "react";
 import Navbar from "./Components/Navbar";
 import MovieData from "./Components/MovieData";
 import WatchedData from "./Components/WatchedData";
+import WashedSummary from "./Components/WashedSummary";
+import WashedMovie from "./Components/WashedMovie";
+import MovieList from "./Components/MovieList";
 
 function App() {
   const tempMovieData = [
@@ -72,18 +75,23 @@ function App() {
 
         <main className="flex justify-center gap-6 mt-6">
           <MovieData
-            movies={movies}
+            //movies={movies}
             isOpen1={isOpen1}
             setIsOpen1={setIsOpen1}
-          />
+          ><MovieList movies={movies} /></MovieData>
           <WatchedData
-            avgRuntime={avgRuntime}
-            avgUserRating={avgUserRating}
-            avgImdbRating={avgImdbRating}
-            watched={watched}
+            //watched={watched}
             isOpen2={isOpen2}
             setIsOpen2={setIsOpen2}
-          />
+          >
+            <WashedSummary
+              watched={watched}
+              avgRuntime={avgRuntime}
+              avgUserRating={avgUserRating}
+              avgImdbRating={avgImdbRating}
+            />
+            <WashedMovie watched={watched} />
+          </WatchedData>
         </main>
       </div>
     </>
