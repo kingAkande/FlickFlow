@@ -82,18 +82,18 @@ function App() {
           >
             <MovieList movies={movies} />
           </MovieData> */}
-          <Box >
+          <Box>
             <MovieList movies={movies} />
           </Box>
 
           <Box>
-          <WashedSummary
+            <WashedSummary
               watched={watched}
               avgRuntime={avgRuntime}
               avgUserRating={avgUserRating}
               avgImdbRating={avgImdbRating}
             />
-             <WashedMovie watched={watched} />
+            <WashedMovie watched={watched} />
           </Box>
 
           {/* <WatchedData
