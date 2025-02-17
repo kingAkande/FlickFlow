@@ -6,6 +6,7 @@ import WatchedData from "./Components/WatchedData";
 import WashedSummary from "./Components/WashedSummary";
 import WashedMovie from "./Components/WashedMovie";
 import MovieList from "./Components/MovieList";
+import Box from "./Components/Box";
 
 function App() {
   const tempMovieData = [
@@ -74,12 +75,28 @@ function App() {
         <Navbar setQuery={setQuery} query={query} movies={movies} />
 
         <main className="flex justify-center gap-6 mt-6">
-          <MovieData
+          {/* <MovieData
             //movies={movies}
             isOpen1={isOpen1}
             setIsOpen1={setIsOpen1}
-          ><MovieList movies={movies} /></MovieData>
-          <WatchedData
+          >
+            <MovieList movies={movies} />
+          </MovieData> */}
+          <Box >
+            <MovieList movies={movies} />
+          </Box>
+
+          <Box>
+          <WashedSummary
+              watched={watched}
+              avgRuntime={avgRuntime}
+              avgUserRating={avgUserRating}
+              avgImdbRating={avgImdbRating}
+            />
+             <WashedMovie watched={watched} />
+          </Box>
+
+          {/* <WatchedData
             //watched={watched}
             isOpen2={isOpen2}
             setIsOpen2={setIsOpen2}
@@ -91,7 +108,7 @@ function App() {
               avgImdbRating={avgImdbRating}
             />
             <WashedMovie watched={watched} />
-          </WatchedData>
+          </WatchedData> */}
         </main>
       </div>
     </>
