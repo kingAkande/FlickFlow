@@ -3,9 +3,12 @@
 
 import React, { useState } from "react";
 
-const StarRating = ({ max = 2, color, className }) => {
+//const messages = ["poor", "fair", "good", "verygood", "execellent"];
+
+const StarRating = ({ max = 2, color, txt, className, messages = [] }) => {
   const [rating, setRating] = useState(0);
   const [tempoRating, setTempoRating] = useState(0);
+
   function handleRate(rate) {
     setRating(rate);
   }
@@ -24,7 +27,11 @@ const StarRating = ({ max = 2, color, className }) => {
           />
         ))}
       </div>
-      <p className="leading-5 text-amber-300 m-0">{tempoRating || rating || ""}</p>
+      <p className={`leading-5 m-0 text-blue-900 text-3xl ${txt}`}>
+        {messages.length === max
+          ? messages[tempoRating ? tempoRating - 1 : rating - 1]
+          : tempoRating || rating || ""}
+      </p>
     </div>
   );
 };
@@ -32,8 +39,8 @@ const StarRating = ({ max = 2, color, className }) => {
 export default StarRating;
 
 function Star({
-  color,
-  className = "h-8 w-8 cursor-pointer ",
+  color = "blue",
+  className = "h-8 w-8 cursor-pointer  ",
   handleRate,
   full,
   handleMouseEnter,
@@ -61,7 +68,7 @@ function Star({
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          stroke="#000"
+          stroke={color}
         >
           <path
             strokeLinecap="round"
