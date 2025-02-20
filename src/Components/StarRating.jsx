@@ -12,9 +12,7 @@ StarRating.propTypes ={
   color:PropTypes.string,
   txt:PropTypes.string,
   className:PropTypes.string,
-  messages:PropTypes.object,
-  onRate : PropTypes.
-  
+  messages:PropTypes.object
 }
 
 export default function StarRating({
