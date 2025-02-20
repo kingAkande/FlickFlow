@@ -2,15 +2,35 @@
 /* eslint-disable no-unused-vars */
 
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 //const messages = ["poor", "fair", "good", "verygood", "execellent"];
 
-const StarRating = ({ max = 2, color, txt, className, messages = [] }) => {
+
+StarRating.propTypes ={
+  max:PropTypes.number,
+  color:PropTypes.string,
+  txt:PropTypes.string,
+  className:PropTypes.string,
+  messages:PropTypes.object,
+  onRate : PropTypes.
+  
+}
+
+export default function StarRating({
+  max = 2,
+  color,
+  txt,
+  className,
+  messages = [],
+  onRate,
+}){
   const [rating, setRating] = useState(0);
   const [tempoRating, setTempoRating] = useState(0);
 
   function handleRate(rate) {
     setRating(rate);
+    onRate(rate)
   }
   return (
     <div className="flex gap-8 items-center ">
@@ -24,6 +44,7 @@ const StarRating = ({ max = 2, color, txt, className, messages = [] }) => {
             handleMouseLeave={() => setTempoRating(0)}
             color={color}
             className={className}
+            poor
           />
         ))}
       </div>
@@ -36,7 +57,6 @@ const StarRating = ({ max = 2, color, txt, className, messages = [] }) => {
   );
 };
 
-export default StarRating;
 
 function Star({
   color = "blue",
