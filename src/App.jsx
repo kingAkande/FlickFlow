@@ -1,5 +1,6 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "./Components/Navbar";
 import MovieData from "./Components/MovieData";
 import WatchedData from "./Components/WatchedData";
@@ -7,6 +8,8 @@ import WashedSummary from "./Components/WashedSummary";
 import WashedMovie from "./Components/WashedMovie";
 import MovieList from "./Components/MovieList";
 import Box from "./Components/Box";
+
+const key = "e3ea8184";
 
 function App() {
   const tempMovieData = [
@@ -60,16 +63,46 @@ function App() {
     arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
   const [query, setQuery] = useState("");
-  const [movies, setMovies] = useState(tempMovieData);
+  const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
   const [isOpen1, setIsOpen1] = useState(true);
   const [isOpen2, setIsOpen2] = useState(true);
+  const [isLoading , setisLoading]= useState(false);
+  const [error , setError]= useState("")
 
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie.userRating));
   const avgRuntime = average(watched.map((movie) => movie.runtime));
+
   <div>MovieData</div>;
-  return (
+
+  useEffect(function(){
+
+    async function fetchMovie() {
+
+      try{
+      setisLoading(true)
+      const res = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${key}&s=interstellar`);
+
+      if(!res.ok) throw new Error("unable to fetch movies");
+      
+      const data = await res.json();
+      setMovies(data.Search)
+      
+    } catch(err){
+      console.log(err.message)
+      setError(err.message)
+      
+    }finally{
+      setisLoading(false);
+      
+      }
+    }
+    fetchMovie();
+  } , [])
+ 
+
+  return ( 
     <>
       <div className="bg-[#212529]">
         <Navbar setQuery={setQuery} query={query} movies={movies} />
@@ -83,7 +116,12 @@ function App() {
             <MovieList movies={movies} />
           </MovieData> */}
           <Box>
-            <MovieList movies={movies} />
+            {/* {isLoading ? <Loader/> : <MovieList movies={movies} />} */}
+            {isLoading &&  <Loader/>}
+            {!isLoading && !error && <MovieList movies={movies} /> }
+
+            {error && <Error message={error}/>}
+
           </Box>
 
           <Box>
@@ -116,3 +154,11 @@ function App() {
 }
 
 export default App;
+
+function Loader(){
+  return <p>Loading...</p>
+}
+
+function Error({message}){
+  return<><span>⛔</span> <p>{message}</p></>
+}

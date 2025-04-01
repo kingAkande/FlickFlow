@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-no-undef */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react-refresh/only-export-components */
 import { StrictMode, useState } from "react";
@@ -5,7 +7,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import StarRating from "./Components/StarRating";
 import TextExpander from "./Components/TextExpander";
-//import App from './App.jsx'
+import App from './App.jsx'
 
 function Test() {
   const [starRate, setStarRate] = useState(0);
@@ -19,7 +21,7 @@ function Test() {
 }
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    {/* <App /> */}
+    <App />
     {/* <StarRating
       color="red"
       txt="text-red-700 text-2xl"
@@ -30,7 +32,7 @@ createRoot(document.getElementById("root")).render(
     <StarRating  color="green" txt="text-green-700 text-2xl" max={5}  />
     <StarRating messages={['good', 'excellent']} />
     <Test/> */}
-    <TextExpander>
+    {/* <TextExpander>
       Space travel is the ultimate adventure! Imagine soaring past the stars and
       exploring new worlds. It's the stuff of dreams and science fiction, but
       believe it or not, space travel is a real thing. Humans and robots are
@@ -55,7 +57,7 @@ createRoot(document.getElementById("root")).render(
         have inspired future generations to keep reaching for the stars. Space
         travel is a pretty cool thing to think about. Who knows what we'll
         discover next!
-      </TextExpander>
+      </TextExpander> */}
 
   </StrictMode>
 );
