@@ -4,7 +4,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-//const messages = ["poor", "fair", "good", "verygood", "execellent"];
 
 
 StarRating.propTypes ={

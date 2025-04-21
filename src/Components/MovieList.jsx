@@ -1,14 +1,16 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useState } from "react";
 
-const MovieList = ({ movies }) => {
+const MovieList = ({ movies  , handleSelectedMovie}) => {
+
   return (
     <ul className="mt-6">
       {movies?.map((movie) => (
         <li
           key={movie.imdbID}
           className="relative grid grid-cols-[4rem_1fr] grid-rows-[auto_auto] gap-x-6 items-center text-lg p-4 border-b border-background-100"
+          onClick={()=> handleSelectedMovie(movie.imdbID)}
         >
           <img
             className="w-16 h-24 object-cover rounded-md"

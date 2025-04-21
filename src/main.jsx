@@ -1,7 +1,7 @@
-/* eslint-disable react/jsx-no-undef */
 /* eslint-disable no-unused-vars */
-/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react-refresh/only-export-components */
+
+
 import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";

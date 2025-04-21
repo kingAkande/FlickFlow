@@ -8,6 +8,7 @@ import WashedSummary from "./Components/WashedSummary";
 import WashedMovie from "./Components/WashedMovie";
 import MovieList from "./Components/MovieList";
 import Box from "./Components/Box";
+import StarRating from "./Components/StarRating";
 
 const key = "e3ea8184";
 
@@ -62,91 +63,130 @@ function App() {
   const average = (arr) =>
     arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
+  // const average = (arr) => {
+  //   // Check if array is empty or undefined
+  //   if (!arr || arr.length === 0) return 0;
+  //   return arr.reduce((acc, cur) => acc + cur, 0) / arr.length;
+  // };
+
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [watched, setWatched] = useState([]);
   const [isOpen1, setIsOpen1] = useState(true);
   const [isOpen2, setIsOpen2] = useState(true);
-  const [isLoading , setisLoading]= useState(false);
-  const [error , setError]= useState("")
+  const [isLoading, setisLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie.userRating));
   const avgRuntime = average(watched.map((movie) => movie.runtime));
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  // const [isselectedMovie, setisSelectedMovie] = useState(false);
 
-  <div>MovieData</div>;
+  const [newlyWashed, setNewlyWashed] = useState(watched);
 
-  useEffect(function(){
+  function updateWashedMovie(newMovie) {
+    setWatched((prevWashed) => [...prevWashed, newMovie]);
+  }
+  //const querie = "fast";
+  //interstellarisselectedMovie
+  // <div>MovieData</div>;
 
-    async function fetchMovie() {
+  function handleSelectedMovie(id) {
+    setSelectedMovie((selectedMovie) => (id === selectedMovie ? null : id));
+    // setisSelectedMovie(true);
 
-      try{
-      setisLoading(true)
-      const res = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${key}&s=interstellar`);
+  }
 
-      if(!res.ok) throw new Error("unable to fetch movies");
-      
-      const data = await res.json();
-      setMovies(data.Search)
-      
-    } catch(err){
-      console.log(err.message)
-      setError(err.message)
-      
-    }finally{
-      setisLoading(false);
-      
+  function closeMovie() {
+    setSelectedMovie(null);
+    // setisSelectedMovie(false);
+  }
+
+  useEffect(
+    function () {
+      async function fetchMovie() {
+        try {
+          setisLoading(true);
+
+          setError("");
+
+          const res = await fetch(
+            `http://www.omdbapi.com/?i=tt3896198&apikey=${key}&s=${query}`
+          );
+
+          if (!res.ok) throw new Error("unable to fetch movies");
+
+          const data = await res.json();
+          //console.log(data);
+
+          if (data.Response === "False") throw new Error("Movie not found");
+
+          if (!data.Search || !Array.isArray(data.Search)) {
+            throw new Error("Invalid response format from API");
+          }
+
+          setMovies(data.Search);
+          console.log(data.Search);
+        } catch (err) {
+          //console.log(err)
+          //console.log(err.message);
+          setError(err.message);
+        } finally {
+          setisLoading(false);
+        }
       }
-    }
-    fetchMovie();
-  } , [])
- 
+      fetchMovie();
+    },
+    [query]
+  );
 
-  return ( 
+  return (
     <>
       <div className="bg-[#212529]">
         <Navbar setQuery={setQuery} query={query} movies={movies} />
 
         <main className="flex justify-center gap-6 mt-6">
-          {/* <MovieData
-            //movies={movies}
-            isOpen1={isOpen1}
-            setIsOpen1={setIsOpen1}
-          >
-            <MovieList movies={movies} />
-          </MovieData> */}
+        
+
           <Box>
             {/* {isLoading ? <Loader/> : <MovieList movies={movies} />} */}
-            {isLoading &&  <Loader/>}
-            {!isLoading && !error && <MovieList movies={movies} /> }
 
-            {error && <Error message={error}/>}
+            {isLoading && <Loader />}
 
+            {!isLoading && error && <Error message={error} />}
+
+            {!isLoading && !error && (
+              <MovieList
+                movies={movies}
+                handleSelectedMovie={handleSelectedMovie}
+              />
+            )}
           </Box>
 
           <Box>
-            <WashedSummary
-              watched={watched}
-              avgRuntime={avgRuntime}
-              avgUserRating={avgUserRating}
-              avgImdbRating={avgImdbRating}
-            />
-            <WashedMovie watched={watched} />
+            {selectedMovie ? (
+              <MovieSelected
+                updateWashedMovie={updateWashedMovie}
+                movid={selectedMovie}
+                closeMovie={closeMovie}
+              />
+            ) : (
+              <>
+                <WashedSummary
+                  watched={watched}
+                  avgRuntime={avgRuntime}
+                  avgUserRating={avgUserRating}
+                  avgImdbRating={avgImdbRating}
+                />
+
+                <WashedMovie watched={watched} />
+              </>
+            )}
+            {/* {isselectedMovie ? selectedMovie : <WashedMovie watched={watched} />} */}
           </Box>
 
-          {/* <WatchedData
-            //watched={watched}
-            isOpen2={isOpen2}
-            setIsOpen2={setIsOpen2}
-          >
-            <WashedSummary
-              watched={watched}
-              avgRuntime={avgRuntime}
-              avgUserRating={avgUserRating}
-              avgImdbRating={avgImdbRating}
-            />
-            <WashedMovie watched={watched} />
-          </WatchedData> */}
+ 
         </main>
       </div>
     </>
@@ -155,10 +195,118 @@ function App() {
 
 export default App;
 
-function Loader(){
-  return <p>Loading...</p>
+function Loader() {
+  return <p>Loading...</p>;
 }
 
-function Error({message}){
-  return<><span>⛔</span> <p>{message}</p></>
+function Error({ message }) {
+  //console.log("Error component received:", message);
+  return (
+    <div className="text-red-500 text-lg font-bold">
+      <span>⛔</span> <p>{message}</p>
+    </div>
+  );
+}
+
+function MovieSelected({ movid, closeMovie, updateWashedMovie }) {
+
+  const [movie, setMovie] = useState({});
+  const [isLoading, setisLoading] = useState(false);
+
+  const {
+    
+    Title,
+    Poster,
+    Released,
+    Genre,
+    Runtime,
+    imdbRating,
+    Plot,
+    Actors,
+    Director,
+    imdbID,
+    Year
+  } = movie;
+
+  function addAsWashedMovie() {
+    const isWashed = {
+      imdbID,
+      Title,
+      Poster,
+      Year,
+      imdbRating: Number(imdbRating),
+      Runtime: Number(Runtime.split(" ").at(0)),
+    };
+
+    updateWashedMovie(isWashed);
+    closeMovie();
+  
+  }
+
+  useEffect(
+    function () {
+      async function getDetails() {
+        setisLoading(true);
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=${key}&i=${movid}`
+        );
+        const data = await res.json();
+        console.log(data);
+        setMovie(data);
+        setisLoading(false);
+        
+      }
+
+      getDetails();
+    },
+    [movid]
+  );
+
+  return (
+    <div>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <header className="flex h-40 mb-12 ">
+            <button
+              onClick={closeMovie}
+              className="rounded-full px-2 absolute ml-2 mt-2 bg-amber-50 text-black"
+            >
+              &larr;
+            </button>
+            <img className="mr-12" src={Poster} alt="" />
+            <div className="text-sm/8">
+              <h2>{Title}</h2>
+              <p>
+                {Released} &bull; {Runtime}
+              </p>
+              <p>{Genre}</p>
+              <p>
+                <span className="mr-4 ">⭐</span>
+                {imdbRating} IMDb rating
+              </p>
+            </div>
+          </header>
+          <div className="flex flex-col items-center justify-center p-4 bg-amber-950">
+            <StarRating max={10} color="yellow" txt="text-yellow-300" />
+            <button
+              onClick={addAsWashedMovie}
+              className="rounded bg-blue-500 px-3 mt-4"
+            >
+              + Add to List
+            </button>
+          </div>
+
+          <section className="text-center mt-12 text-sm/8">
+            <p>
+              <em>{Plot}</em>
+            </p>
+            <p>Starring {Actors}</p>
+            <p>Directed by {Director}</p>
+          </section>
+        </>
+      )}
+    </div>
+  );
 }
