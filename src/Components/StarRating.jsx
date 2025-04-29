@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 
 
 
+
 StarRating.propTypes ={
   max:PropTypes.number,
   color:PropTypes.string,

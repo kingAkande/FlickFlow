@@ -4,11 +4,7 @@ import React, { useState } from 'react'
 
 const WashedMovie = ({watched}) => {
 
-  // const[newlyWashed , setNewlyWashed ]= useState(watched);
 
-  // function updateWashedMovie(newMovie){
-  //   setNewlyWashed((prevWashed)=>[...prevWashed , newMovie])
-  // }
 
   return (
     <ul className="divide-y divide-background-100">

@@ -81,9 +81,6 @@ function App() {
   const avgUserRating = average(watched.map((movie) => movie.userRating));
   const avgRuntime = average(watched.map((movie) => movie.runtime));
   const [selectedMovie, setSelectedMovie] = useState(null);
-  // const [isselectedMovie, setisSelectedMovie] = useState(false);
-
-  const [newlyWashed, setNewlyWashed] = useState(watched);
 
   function updateWashedMovie(newMovie) {
     setWatched((prevWashed) => [...prevWashed, newMovie]);
@@ -95,7 +92,6 @@ function App() {
   function handleSelectedMovie(id) {
     setSelectedMovie((selectedMovie) => (id === selectedMovie ? null : id));
     // setisSelectedMovie(true);
-
   }
 
   function closeMovie() {
@@ -147,8 +143,6 @@ function App() {
         <Navbar setQuery={setQuery} query={query} movies={movies} />
 
         <main className="flex justify-center gap-6 mt-6">
-        
-
           <Box>
             {/* {isLoading ? <Loader/> : <MovieList movies={movies} />} */}
 
@@ -170,6 +164,7 @@ function App() {
                 updateWashedMovie={updateWashedMovie}
                 movid={selectedMovie}
                 closeMovie={closeMovie}
+                watched = {watched}
               />
             ) : (
               <>
@@ -185,8 +180,6 @@ function App() {
             )}
             {/* {isselectedMovie ? selectedMovie : <WashedMovie watched={watched} />} */}
           </Box>
-
- 
         </main>
       </div>
     </>
@@ -208,13 +201,15 @@ function Error({ message }) {
   );
 }
 
-function MovieSelected({ movid, closeMovie, updateWashedMovie }) {
-
+function MovieSelected({ movid, closeMovie, updateWashedMovie, watched }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setisLoading] = useState(false);
+  const [userRating, setUserRting] = useState(0);
+
+  const isWatched = watched.map((mov)=>mov.imdbID).includes(movid)
+  const watchedUserRating = watched.find((mov)=>mov.imdbID === movid)?.userRating;
 
   const {
-    
     Title,
     Poster,
     Released,
@@ -225,22 +220,23 @@ function MovieSelected({ movid, closeMovie, updateWashedMovie }) {
     Actors,
     Director,
     imdbID,
-    Year
+    Year,
   } = movie;
 
   function addAsWashedMovie() {
-    const isWashed = {
+    const isWatched = {
       imdbID,
       Title,
       Poster,
       Year,
       imdbRating: Number(imdbRating),
       Runtime: Number(Runtime.split(" ").at(0)),
+      userRating,
     };
 
-    updateWashedMovie(isWashed);
-    closeMovie();
+    updateWashedMovie(isWatched),
   
+    closeMovie()
   }
 
   useEffect(
@@ -254,7 +250,6 @@ function MovieSelected({ movid, closeMovie, updateWashedMovie }) {
         console.log(data);
         setMovie(data);
         setisLoading(false);
-        
       }
 
       getDetails();
@@ -288,14 +283,24 @@ function MovieSelected({ movid, closeMovie, updateWashedMovie }) {
               </p>
             </div>
           </header>
-          <div className="flex flex-col items-center justify-center p-4 bg-amber-950">
-            <StarRating max={10} color="yellow" txt="text-yellow-300" />
-            <button
-              onClick={addAsWashedMovie}
-              className="rounded bg-blue-500 px-3 mt-4"
-            >
-              + Add to List
-            </button>
+       <div className="flex flex-col items-center justify-center p-4 bg-amber-950">
+            {!isWatched ? <><StarRating
+              max={10}
+              color="yellow"
+              txt="text-yellow-300"
+              onRate={setUserRting}
+            />
+
+            {userRating ? (
+              <button
+                onClick={addAsWashedMovie}
+                className="rounded bg-blue-500 px-3 mt-4"
+              >
+                + Add to List
+              </button>
+            ) : (
+              ""
+            )}</> :<p>You have rated this movie {watchedUserRating} <span>⭐</span></p> }
           </div>
 
           <section className="text-center mt-12 text-sm/8">
