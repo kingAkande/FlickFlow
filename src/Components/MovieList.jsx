@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const MovieList = ({ movies  , handleSelectedMovie}) => {
+
 
   return (
     <ul className="mt-6">

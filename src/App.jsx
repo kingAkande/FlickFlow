@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
@@ -94,6 +95,10 @@ function App() {
     // setisSelectedMovie(true);
   }
 
+  function handleDelete(id) {
+    setWatched((watched) => watched.filter((mov) => mov.imdbID != id));
+  }
+
   function closeMovie() {
     setSelectedMovie(null);
     // setisSelectedMovie(false);
@@ -101,6 +106,8 @@ function App() {
 
   useEffect(
     function () {
+      const controller = new AbortController();
+      
       async function fetchMovie() {
         try {
           setisLoading(true);
@@ -108,7 +115,8 @@ function App() {
           setError("");
 
           const res = await fetch(
-            `http://www.omdbapi.com/?i=tt3896198&apikey=${key}&s=${query}`
+            `http://www.omdbapi.com/?i=tt3896198&apikey=${key}&s=${query}`,
+            { signal: controller.signal }
           );
 
           if (!res.ok) throw new Error("unable to fetch movies");
@@ -127,12 +135,16 @@ function App() {
         } catch (err) {
           //console.log(err)
           //console.log(err.message);
-          setError(err.message);
+
+          if (err.name !== "AbortError") {
+            setError(err.message);
+          }
         } finally {
           setisLoading(false);
         }
       }
       fetchMovie();
+      return () => controller.abort();
     },
     [query]
   );
@@ -164,7 +176,7 @@ function App() {
                 updateWashedMovie={updateWashedMovie}
                 movid={selectedMovie}
                 closeMovie={closeMovie}
-                watched = {watched}
+                watched={watched}
               />
             ) : (
               <>
@@ -175,7 +187,7 @@ function App() {
                   avgImdbRating={avgImdbRating}
                 />
 
-                <WashedMovie watched={watched} />
+                <WashedMovie watched={watched} onDelete={handleDelete} />
               </>
             )}
             {/* {isselectedMovie ? selectedMovie : <WashedMovie watched={watched} />} */}
@@ -206,8 +218,10 @@ function MovieSelected({ movid, closeMovie, updateWashedMovie, watched }) {
   const [isLoading, setisLoading] = useState(false);
   const [userRating, setUserRting] = useState(0);
 
-  const isWatched = watched.map((mov)=>mov.imdbID).includes(movid)
-  const watchedUserRating = watched.find((mov)=>mov.imdbID === movid)?.userRating;
+  const isWatched = watched.map((mov) => mov.imdbID).includes(movid);
+  const watchedUserRating = watched.find(
+    (mov) => mov.imdbID === movid
+  )?.userRating;
 
   const {
     Title,
@@ -234,9 +248,7 @@ function MovieSelected({ movid, closeMovie, updateWashedMovie, watched }) {
       userRating,
     };
 
-    updateWashedMovie(isWatched),
-  
-    closeMovie()
+    updateWashedMovie(isWatched), closeMovie();
   }
 
   useEffect(
@@ -255,6 +267,19 @@ function MovieSelected({ movid, closeMovie, updateWashedMovie, watched }) {
       getDetails();
     },
     [movid]
+  );
+
+  useEffect(
+    function () {
+      if (!Title) return;
+      document.title = Title;
+
+      return function () {
+        document.title = "Use Poporn";
+      };
+    },
+
+    [Title]
   );
 
   return (
@@ -283,24 +308,32 @@ function MovieSelected({ movid, closeMovie, updateWashedMovie, watched }) {
               </p>
             </div>
           </header>
-       <div className="flex flex-col items-center justify-center p-4 bg-amber-950">
-            {!isWatched ? <><StarRating
-              max={10}
-              color="yellow"
-              txt="text-yellow-300"
-              onRate={setUserRting}
-            />
+          <div className="flex flex-col items-center justify-center p-4 bg-amber-950">
+            {!isWatched ? (
+              <>
+                <StarRating
+                  max={10}
+                  color="yellow"
+                  txt="text-yellow-300"
+                  onRate={setUserRting}
+                />
 
-            {userRating ? (
-              <button
-                onClick={addAsWashedMovie}
-                className="rounded bg-blue-500 px-3 mt-4"
-              >
-                + Add to List
-              </button>
+                {userRating ? (
+                  <button
+                    onClick={addAsWashedMovie}
+                    className="rounded bg-blue-500 px-3 mt-4"
+                  >
+                    + Add to List
+                  </button>
+                ) : (
+                  ""
+                )}
+              </>
             ) : (
-              ""
-            )}</> :<p>You have rated this movie {watchedUserRating} <span>⭐</span></p> }
+              <p>
+                You have rated this movie {watchedUserRating} <span>⭐</span>
+              </p>
+            )}
           </div>
 
           <section className="text-center mt-12 text-sm/8">

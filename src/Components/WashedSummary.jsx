@@ -13,11 +13,11 @@ const WashedSummary = ({ watched, avgImdbRating, avgUserRating, avgRuntime }) =>
         </p>
         <p className="flex items-center gap-2 text-sm">
           <span>⭐️</span>
-          <span>{avgImdbRating}</span>
+          <span>{avgImdbRating.toFixed(2)}</span>
         </p>
         <p className="flex items-center gap-2 text-sm">
           <span>🌟</span>
-          <span>{avgUserRating}</span>
+          <span>{avgUserRating.toFixed(2)}</span>
         </p>
         <p className="flex items-center gap-2 text-sm">
           <span>⏳</span>
