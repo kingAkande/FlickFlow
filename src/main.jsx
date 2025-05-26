@@ -8,6 +8,7 @@ import "./index.css";
 import StarRating from "./Components/StarRating";
 import TextExpander from "./Components/TextExpander";
 import App from './App.jsx'
+import MonieCOnverter from "./Components/MonieCOnverter.jsx";
 
 function Test() {
   const [starRate, setStarRate] = useState(0);
@@ -21,7 +22,7 @@ function Test() {
 }
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <App />
+    {/* <App /> */}
     {/* <StarRating
       color="red"
       txt="text-red-700 text-2xl"
@@ -58,6 +59,6 @@ createRoot(document.getElementById("root")).render(
         travel is a pretty cool thing to think about. Who knows what we'll
         discover next!
       </TextExpander> */}
-
+    <MonieCOnverter/>
   </StrictMode>
 );

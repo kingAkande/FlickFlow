@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
@@ -107,7 +106,7 @@ function App() {
   useEffect(
     function () {
       const controller = new AbortController();
-      
+
       async function fetchMovie() {
         try {
           setisLoading(true);
@@ -280,6 +279,22 @@ function MovieSelected({ movid, closeMovie, updateWashedMovie, watched }) {
     },
 
     [Title]
+  );
+
+  useEffect(
+    function  () {
+
+      function escapeKey(e){
+        if (e.code === "Escape") {
+          closeMovie();
+        }
+      }
+
+      document.addEventListener("keydown",escapeKey );
+      return ()=> document.removeEventListener("keydown",escapeKey)
+
+    },
+    [closeMovie]
   );
 
   return (
