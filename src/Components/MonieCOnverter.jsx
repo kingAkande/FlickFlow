@@ -22,14 +22,12 @@ useEffect(function(){
 
     const data = await res.json();
 
-    // console.log(data.rates);
+    console.log(data);
 
     setConvertedAmount(data.rates[valueTo]); 
 
     // const convertedValue = Object.values(data.rates)[0];
     // setConvertedAmount(convertedValue);
-
-
   }
 
 
